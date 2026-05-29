@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:480px; margin:0 auto;">
+  <h2 style="color:#1A6B8A; margin-bottom:20px;">
+    {% if acao == 'novo' %}Novo Usuário{% else %}Editar Usuário{% endif %}
+  </h2>
+
+  <form method="POST" novalidate>
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-weight:bold; margin-bottom:4px;">Nome *</label>
+      <input
+        type="text" name="nome" value="{{ dados.get('nome', '') }}"
+        data-testid="nome"
+        placeholder="Nome completo"
+        style="width:100%; padding:10px 12px; border:1px solid {% if erros.get('nome') %}#c0392b{% else %}#ccc{% endif %}; border-radius:5px; font-size:0.95rem;"
+      >
+      {% if erros.get('nome') %}
+        <span class="erro-msg" data-testid="erro-nome">{{ erros.nome }}</span>
+      {% endif %}
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-weight:bold; margin-bottom:4px;">E-mail *</label>
+      <input
+        type="text" name="email" value="{{ dados.get('email', '') }}"
+        data-testid="email"
+        placeholder="exemplo@email.com"
+        style="width:100%; padding:10px 12px; border:1px solid {% if erros.get('email') %}#c0392b{% else %}#ccc{% endif %}; border-radius:5px; font-size:0.95rem;"
+      >
+      {% if erros.get('email') %}
+        <span class="erro-msg" data-testid="erro-email">{{ erros.email }}</span>
+      {% endif %}
+    </div>
+
+    {% if acao == 'novo' %}
+    <div style="margin-bottom:20px;">
+      <label style="display:block; font-weight:bold; margin-bottom:4px;">Senha *</label>
+      <input
+        type="password" name="senha"
+        data-testid="senha"
+        placeholder="Mínimo 8 caracteres"
+        style="width:100%; padding:10px 12px; border:1px solid {% if erros.get('senha') %}#c0392b{% else %}#ccc{% endif %}; border-radius:5px; font-size:0.95rem;"
+      >
+      {% if erros.get('senha') %}
+        <span class="erro-msg" data-testid="erro-senha">{{ erros.senha }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div style="display:flex; gap:10px;">
+      <button type="submit" class="btn btn-primary" data-testid="btn-salvar">
+        {% if acao == 'novo' %}Salvar{% else %}Atualizar{% endif %}
+      </button>
+      <a href="/usuarios" class="btn btn-secondary" data-testid="btn-cancelar">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+    <h2 style="color:#1A6B8A;">Usuários Cadastrados</h2>
+    <a href="/novo" class="btn btn-primary" data-testid="btn-novo">+ Novo Usuário</a>
+  </div>
+
+  <form method="GET" action="/usuarios" style="margin-bottom:20px; display:flex; gap:8px;">
+    <input
+      type="text" name="busca" value="{{ busca }}"
+      placeholder="Buscar por nome..."
+      data-testid="campo-busca"
+      style="padding:8px 12px; border:1px solid #ccc; border-radius:5px; flex:1; font-size:0.9rem;"
+    >
+    <button type="submit" class="btn btn-primary" data-testid="btn-buscar">Buscar</button>
+    {% if busca %}
+      <a href="/usuarios" class="btn btn-secondary">Limpar</a>
+    {% endif %}
+  </form>
+
+  {% if usuarios %}
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="background:#1A6B8A; color:white;">
+          <th style="padding:10px 14px; text-align:left;">#</th>
+          <th style="padding:10px 14px; text-align:left;">Nome</th>
+          <th style="padding:10px 14px; text-align:left;">E-mail</th>
+          <th style="padding:10px 14px; text-align:center;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr data-testid="usuario-item" style="border-bottom:1px solid #eee; {% if loop.index is even %}background:#f9f9f9;{% endif %}">
+          <td style="padding:10px 14px; color:#888;">{{ u.id }}</td>
+          <td style="padding:10px 14px; font-weight:bold;">{{ u.nome }}</td>
+          <td style="padding:10px 14px;">{{ u.email }}</td>
+          <td style="padding:10px 14px; text-align:center; display:flex; gap:8px; justify-content:center;">
+            <a href="/editar/{{ u.id }}" class="btn btn-warning" data-testid="btn-editar">Editar</a>
+            <form method="POST" action="/deletar/{{ u.id }}" onsubmit="return confirmarDelete(event, this)">
+              <button type="submit" class="btn btn-danger" data-testid="btn-deletar">Deletar</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="margin-top:14px; color:#888; font-size:0.85rem;">
+      Total: <strong>{{ usuarios|length }}</strong> usuário(s)
+    </p>
+  {% else %}
+    <p data-testid="msg-vazio" style="color:#888; text-align:center; padding:32px;">
+      Nenhum usuário encontrado.
+    </p>
+  {% endif %}
+</div>
+
+<!-- Modal de confirmação de deleção -->
+<div id="modal-delete" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:8px; padding:28px; max-width:360px; width:90%; text-align:center; box-shadow:0 4px 24px rgba(0,0,0,0.2);">
+    <p style="font-size:1.1rem; margin-bottom:20px;">Tem certeza que deseja deletar este usuário?</p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <button class="btn btn-danger" data-testid="btn-confirmar" onclick="executarDelete()">Confirmar</button>
+      <button class="btn btn-secondary" data-testid="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let formPendente = null;
+  function confirmarDelete(e, form) {
+    e.preventDefault();
+    formPendente = form;
+    const modal = document.getElementById('modal-delete');
+    modal.style.display = 'flex';
+    return false;
+  }
+  function executarDelete() {
+    if (formPendente) formPendente.submit();
+  }
+  function fecharModal() {
+    formPendente = null;
+    document.getElementById('modal-delete').style.display = 'none';
+  }
+</script>
+{% endblock %}

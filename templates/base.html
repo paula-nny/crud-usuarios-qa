@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Usuários — Coude QA</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #333; }
+    header {
+      background: #1A6B8A; color: white; padding: 16px 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    header h1 { font-size: 1.3rem; }
+    header span { font-size: 0.85rem; opacity: 0.8; }
+    .container { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; }
+    .btn {
+      display: inline-block; padding: 8px 18px; border-radius: 5px;
+      font-size: 0.9rem; font-weight: bold; cursor: pointer;
+      text-decoration: none; border: none; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #1A6B8A; color: white; }
+    .btn-warning { background: #e8a020; color: white; }
+    .btn-danger  { background: #c0392b; color: white; }
+    .btn-secondary { background: #888; color: white; }
+    .flash {
+      padding: 12px 18px; border-radius: 5px; margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .flash.sucesso { background: #d4edda; color: #1a7a3a; border: 1px solid #b2dfca; }
+    .flash.erro    { background: #fde8e8; color: #b30000; border: 1px solid #f5c6cb; }
+    .erro-msg { color: #c0392b; font-size: 0.82rem; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>&#128101; CRUD de Usuários</h1>
+      <span>Agencia Junior de Desenvolvimento — Coude QA</span>
+    </div>
+  </header>
+  <div class="container">
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}
+        <div class="flash {{ cat }}" data-testid="msg-{{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

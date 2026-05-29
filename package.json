@@ -1,0 +1,12 @@
+{
+  "name": "crud-usuarios-qa",
+  "version": "1.0.0",
+  "description": "Teste técnico QA — CRUD de Usuários com Playwright",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}
